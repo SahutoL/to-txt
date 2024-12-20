@@ -1,4 +1,4 @@
-const CACHE_NAME = 'to-txt-cache-v1.8.0';
+const CACHE_NAME = 'to-txt-cache-v1.8.1';
 const urlsToCache = [
   '/',
   '/static/icons/icon-192x192.png',
