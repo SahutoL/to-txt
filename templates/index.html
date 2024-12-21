@@ -15,7 +15,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const novelUrl = urlParams.get('novelUrl');
             if (novelUrl) {
-                const match = novelUrl.match(/^https:\/\/syosetu\.org\/([^\/]+)\/?/);
+                const match = novelUrl.match(/^https:\/\/syosetu\.org\/novel\/([^\/]+)\/?/);
                 if (match) {
                     novelUrl = `https://syosetu.org/${match[1]}/`;
                 }
