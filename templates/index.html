@@ -15,11 +15,13 @@
             const urlParams = new URLSearchParams(window.location.search);
             const novelUrl = urlParams.get('novelUrl');
             if (novelUrl) {
-                const match = novelUrl.match(/^https:\/\/syosetu\.org\/novel\/([^\/]+)\/?/);
-                if (match) {
-                    novelUrl = `https://syosetu.org/${match[1]}/`;
-                }
+                const match = novelUrl.match(/https:\/\/syosetu\.org\/novel\/(\d+)\/\d+\.html/);
+                    if (match) {
+                        const nid = match[1];
+                        novelUrl = `https://syosetu.org/novel/${nid}/`;
+                    };
                 document.getElementById('nid').value = novelUrl;
+            };
         };
     </script>
 </head>
