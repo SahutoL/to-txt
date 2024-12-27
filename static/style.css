@@ -18,6 +18,19 @@ body {
     margin-bottom: 7%;
 }
 
+#paste-btn {
+    border-radius: 0 5px 5px 0;
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    transition: all 0.3s ease;
+}
+
+#paste-btn:hover {
+    background-color: #e9ecef;
+    color: #495057;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 .search-result-item {
     background-color: #ffffff;
     border-radius: 12px;
