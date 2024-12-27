@@ -41,7 +41,8 @@
                     <div class="mb-3">
                         <label for="nid" class="form-label">小説URL:</label>
                         <input type="text" class="form-control" id="nid" name="nid" placeholder="https://syosetu.org/novel/{nid}/" required>
-                        <div class="form-text">URLの {nid} 部分を小説IDに置き換えてください。</div>
+                        <button type="button" class="btn btn-outline-secondary" id="paste-btn">ペースト</button>
+                         <div class="form-text">URLの {nid} 部分を小説IDに置き換えてください。</div>
                     </div>
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary" id="submit-btn">.txtへ変換</button>
@@ -321,6 +322,22 @@
         setTheme(newTheme);
     });
     setTheme(currentTheme)
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        const pasteButton = document.getElementById("paste-btn");
+        const nidInput = document.getElementById("nid");
+
+        pasteButton.addEventListener("click", async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text) {
+                    nidInput.value = text;
+                }
+            } catch (error) {
+                alert("クリップボードへのアクセスに失敗しました。ブラウザの設定を確認してください。");
+            }
+        });
+    });
     
     document.getElementById('scrape-form').addEventListener('submit', function(e) {
         e.preventDefault();
