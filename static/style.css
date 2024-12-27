@@ -18,17 +18,27 @@ body {
     margin-bottom: 7%;
 }
 
-#paste-btn {
-    border-radius: 0 5px 5px 0;
-    font-size: 0.9rem;
-    padding: 8px 15px;
-    transition: all 0.3s ease;
+.input-group {
+    display: flex;
+    gap: 10px;
 }
 
-#paste-btn:hover {
-    background-color: #e9ecef;
-    color: #495057;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.input-url-button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    border-radius: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #3498db;
+    color: #3498db;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.input-url-button:hover {
+    background-color: #3498db;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
 }
 
 .search-result-item {
