@@ -40,9 +40,11 @@
                 <form id="scrape-form">
                     <div class="mb-3">
                         <label for="nid" class="form-label">小説URL:</label>
-                        <input type="text" class="form-control" id="nid" name="nid" placeholder="https://syosetu.org/novel/{nid}/" required>
-                        <button type="button" class="btn btn-outline-secondary" id="paste-btn">ペースト</button>
-                         <div class="form-text">URLの {nid} 部分を小説IDに置き換えてください。</div>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="nid" name="nid" placeholder="https://syosetu.org/novel/{nid}/" required>
+                            <button type="button" class="btn input-url-button" id="paste-button">貼り付け</button>
+                        </div>
+                        <div class="form-text">URLの {nid} 部分を小説IDに置き換えてください。</div>
                     </div>
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary" id="submit-btn">.txtへ変換</button>
