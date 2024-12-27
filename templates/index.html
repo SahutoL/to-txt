@@ -323,18 +323,18 @@
     });
     setTheme(currentTheme)
     
-    document.addEventListener("DOMContentLoaded", () => {
-        const pasteButton = document.getElementById("paste-btn");
-        const nidInput = document.getElementById("nid");
+    document.addEventListener('DOMContentLoaded', () => {
+        const pasteButton = document.getElementById('paste-button');
+        const inputField = document.getElementById('nid');
 
-        pasteButton.addEventListener("click", async () => {
+        pasteButton.addEventListener('click', async () => {
             try {
-                const text = await navigator.clipboard.readText();
-                if (text) {
-                    nidInput.value = text;
+                const clipboardText = await navigator.clipboard.readText();
+                if (clipboardText) {
+                    inputField.value = clipboardText;
                 }
             } catch (error) {
-                alert("クリップボードへのアクセスに失敗しました。ブラウザの設定を確認してください。");
+                alert('クリップボードのアクセスに失敗しました。ブラウザの設定を確認してください。');
             }
         });
     });
