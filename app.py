@@ -178,16 +178,15 @@ def get_narou_novel_txt(novel_url: str, nid: str):
     scraper = cloudscraper.create_scraper()
     
     try:
-        """
         sleep(get_random_delay())
         if 'ncode' in novel_url:
-            ncode = re.search(r"https://ncode\.syosetu\.com/([^/]+)/", novel_url).group(1)
+            ncode = nid
             novel_info_url = f'https://ncode.syosetu.com/novelview/infotop/ncode/{ncode}/'
             response = scraper.get(novel_info_url, headers=headers, cookies={'over18':'yes'})
         elif 'novel18' in novel_url:
-            ncode = re.search(r"https://novel18\.syosetu\.com/([^/]+)/", novel_url).group(1)
+            ncode = nid
             response = scraper.get(f'https://novel18.syosetu.com/novelview/infotop/ncode/{ncode}/', headers=headers, cookies={'over18':'yes'})
-        """
+        print(response.text[:500])
         sleep(get_random_delay())
         response = scraper.get(novel_url, headers=headers, cookies={'over18':'yes'})
         print('Response text:', response.text[:500])
