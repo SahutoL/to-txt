@@ -175,7 +175,7 @@ def get_narou_novel_txt(novel_url: str, nid: str):
         "Connection": "keep-alive"
     }
     
-    scraper = cloudscraper.create_scraper(browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False})
+    scraper = cloudscraper.create_scraper()
     
     try:
         """
@@ -189,7 +189,7 @@ def get_narou_novel_txt(novel_url: str, nid: str):
             response = scraper.get(f'https://novel18.syosetu.com/novelview/infotop/ncode/{ncode}/', headers=headers, cookies={'over18':'yes'})
         """
         sleep(get_random_delay())
-        response = get_session().get(novel_url, headers=headers, cookies={'over18':'yes'})
+        response = scraper.get(novel_url, headers=headers, cookies={'over18':'yes'})
         print('Response text:', response.text[:500])
         soup = BeautifulSoup(response.text, "html.parser")
         print('soup: ', soup.prettify())
