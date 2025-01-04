@@ -302,7 +302,7 @@ def protected():
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 @jwt_required()
 def index():
     current_user = get_jwt_identity()
