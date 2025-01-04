@@ -33,12 +33,11 @@ def get_session():
 
 def get_random_user_agent():
     windows_versions = ["10.0"]
-    safari_versions = ["604.1", "605.1.15", "605.1.15"]
-    webkit_versions = ["537.36", "605.1.15", "605.1.15"]
+    chrome_versions = f"{random.randint(119,129)}.0.0.0"
     user_agent = (
         f"Mozilla/5.0 (Windows NT {random.choice(windows_versions)}; Win64; x64) "
-        f"AppleWebKit/{random.choice(webkit_versions)} (KHTML, like Gecko) "
-        f"Version/{random.uniform(16, 17):.1f} Safari/{random.choice(safari_versions)}"
+        f"AppleWebKit/537.36 (KHTML, like Gecko) "
+        f"Chrome/{chrome_versions} Safari/537.36"
     )
     return user_agent
 
@@ -168,7 +167,6 @@ def get_narou_novel_txt(novel_url: str, ncode: str):
     novel_url = novel_url.rstrip('/') + '/'
     ks2 = ''.join(random.choices(string.ascii_lowercase + string.digits, k=12))
     cookie = {'over18':'yes', 'ks2':ks2, 'sasieno':'0'}
-    print(f'cookie: {cookie}')
     headers = {
         "User-Agent": get_random_user_agent(),
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
@@ -179,7 +177,7 @@ def get_narou_novel_txt(novel_url: str, ncode: str):
         "Connection": "keep-alive"
     }
     
-    scraper = cloudscraper.create_scraper(browser={'browser': 'safari','platform': 'windows','desktop': True})
+    scraper = cloudscraper.create_scraper(browser={'browser': 'chrome','platform': 'windows','desktop': True})
     
     try:
         sleep(get_random_delay())
