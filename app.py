@@ -284,16 +284,17 @@ def parse_novel(novel):
         'favs': favs
     }
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    data = request.json
-    username = data.get("username")
-    password = data.get("password")
-
-    if username in VALID_USERS and VALID_USERS[username] == password:
-        access_token = create_access_token(identity=username)
-        return jsonify(access_token=access_token), 200
-    return jsonify({"error": "認証に失敗しました"}), 401
+    if request.method == 'POST':
+        data = request.json
+        username = data.get("username")
+        password = data.get("password")
+        if username in VALID_USERS and VALID_USERS[username] == password:
+            access_token = create_access_token(identity=username)
+            return jsonify(access_token=access_token), 200
+        return jsonify({"error": "認証に失敗しました"}), 401
+    return render_template('login.html')
 
 @app.route('/protected', methods=['GET'])
 @jwt_required()
@@ -301,9 +302,12 @@ def protected():
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
 
-
 @app.route('/', methods=['GET', 'POST'])
+@jwt_required(optional=True)
 def index():
+    current_user = get_jwt_identity()
+    if not current_user:
+        return redirect(url_for('login'))
     return render_template('index.html')
 
 @app.route('/start-scraping', methods=['POST'])
