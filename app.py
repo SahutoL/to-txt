@@ -188,7 +188,11 @@ def get_narou_novel_txt(novel_url: str, ncode: str):
             novel_info_url = f'https://novel18.syosetu.com/novelview/infotop/ncode/{ncode}/'
             response = scraper.get(novel_info_url, headers=headers, cookies=cookie)
         
+        print(f'response.status_code: {response.status_code}')
+        print(f'response.headers: {response.headers}')
         print(f'response.text: {response.text[:500]}')
+        
+        
         sleep(get_random_delay())
         response = scraper.get(novel_url, headers=headers, cookies=cookie)
         print('Response text:', response.text[:500])
