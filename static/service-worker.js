@@ -1,6 +1,7 @@
 const CACHE_NAME = 'to-txt-cache-v1.10.0';
 const urlsToCache = [
   '/',
+  '/login',
   '/static/icons/icon-192x192.png',
   '/static/icons/icon-512x512.png',
 ];
