@@ -32,14 +32,15 @@ def get_session():
     return session
 
 def get_random_user_agent():
-    user_agents = [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15",
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:89.0) Gecko/20100101 Firefox/89.0"
-    ]
-    return random.choice(user_agents)
+    windows_versions = ["10.0"]
+    safari_versions = ["604.1", "605.1.15", "605.1.15"]
+    webkit_versions = ["537.36", "605.1.15", "605.1.15"]
+    user_agent = (
+        f"Mozilla/5.0 (Windows NT {random.choice(windows_versions)}; Win64; x64) "
+        f"AppleWebKit/{random.choice(webkit_versions)} (KHTML, like Gecko) "
+        f"Version/{random.uniform(16, 17):.1f} Safari/{random.choice(safari_versions)}"
+    )
+    return user_agent
 
 def get_random_referer():
     referers = [
@@ -166,6 +167,8 @@ def get_narou_chapter_text(scraper, url, headers, nid, wasuu, retry_count=3):
 def get_narou_novel_txt(novel_url: str, ncode: str):
     novel_url = novel_url.rstrip('/') + '/'
     ks2 = ''.join(random.choices(string.ascii_lowercase + string.digits, k=12))
+    cookie = {'over18':'yes', 'ks2':ks2, 'sasieno':'0'}
+    print(f'cookie: {cookie}')
     headers = {
         "User-Agent": get_random_user_agent(),
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
@@ -176,20 +179,20 @@ def get_narou_novel_txt(novel_url: str, ncode: str):
         "Connection": "keep-alive"
     }
     
-    scraper = cloudscraper.create_scraper()
+    scraper = cloudscraper.create_scraper(browser={'browser': 'safari','platform': 'windows','desktop': True})
     
     try:
         sleep(get_random_delay())
         if 'ncode' in novel_url:
             novel_info_url = f'https://ncode.syosetu.com/novelview/infotop/ncode/{ncode}/'
-            response = scraper.get(novel_info_url, headers=headers, cookies={'over18':'yes', 'ks2':ks2})
+            response = scraper.get(novel_info_url, headers=headers, cookies=cookie)
         elif 'novel18' in novel_url:
             novel_info_url = f'https://novel18.syosetu.com/novelview/infotop/ncode/{ncode}/'
-            response = scraper.get(novel_info_url, headers=headers, cookies={'over18':'yes'})
+            response = scraper.get(novel_info_url, headers=headers, cookies=cookie)
         
         print(f'response.text: {response.text[:500]}')
         sleep(get_random_delay())
-        response = scraper.get(novel_url, headers=headers, cookies={'over18':'yes'})
+        response = scraper.get(novel_url, headers=headers, cookies=cookie)
         print('Response text:', response.text[:500])
         soup = BeautifulSoup(response.text, "html.parser")
         print('soup: ', soup.prettify())
