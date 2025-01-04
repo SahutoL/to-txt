@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, send_file, jsonify, send_from_directory
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -6,10 +7,22 @@ from urllib import request
 from urllib.parse import urlencode
 from bs4 import BeautifulSoup
 import concurrent.futures
+from datetime import timedelta
 from time import sleep
 import threading, io, os, re, random, logging, cloudscraper, string
 
+
 app = Flask(__name__)
+
+app.secret_key = os.urandom(24)
+app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=3)
+
+jwt = JWTManager(app)
+
+VALID_USERS = {
+    "admin": os.environ.get("APP_PASSWORD")
+}
 
 logging.basicConfig(level=logging.INFO)
 
@@ -270,6 +283,24 @@ def parse_novel(novel):
         'keywords': keywords,
         'favs': favs
     }
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    username = data.get("username")
+    password = data.get("password")
+
+    if username in VALID_USERS and VALID_USERS[username] == password:
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token), 200
+    return jsonify({"error": "認証に失敗しました"}), 401
+
+@app.route('/protected', methods=['GET'])
+@jwt_required()
+def protected():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
