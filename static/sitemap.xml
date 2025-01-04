@@ -2,8 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url>
       <loc>https://to-txt.onrender.com/</loc>
-      <lastmod>2024-08-01</lastmod>
-      <changefreq>monthly</changefreq>
+      <lastmod>2025-01-04</lastmod>
+      <changefreq>weekly</changefreq>
       <priority>1.0</priority>
+   </url>
+   <url>
+      <loc>https://to-txt.onrender.com/login</loc>
+      <lastmod>2025-01-04</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>2.0</priority>
    </url>
 </urlset>
