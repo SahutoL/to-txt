@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, send_file, jsonify, send_from_directory
+from flask import Flask, redirect, render_template, request, send_file, jsonify, send_from_directory, url_for
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import requests
 from requests.adapters import HTTPAdapter
