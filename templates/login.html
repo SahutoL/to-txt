@@ -22,15 +22,7 @@
                 const data = await response.json();
                 localStorage.setItem('access_token', data.access_token);
                 alert('ログイン成功！');
-                const response = await fetch('/', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${data.access_token}`
-                    }
-                });
-                if (response.ok) {
-                    window.location.href = '/';
-                }
+                window.location.href = '/';
             } else {
                 alert('ログイン失敗。ユーザー名またはパスワードが間違っています。');
             }
