@@ -6,7 +6,7 @@ from urllib.parse import urlencode
 from bs4 import BeautifulSoup
 import concurrent.futures
 from time import sleep
-import threading, io, os, re, random, logging, cloudscraper
+import threading, io, os, re, random, logging, cloudscraper, string
 
 app = Flask(__name__)
 
