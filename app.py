@@ -283,6 +283,8 @@ def start_scraping():
     else:
         return jsonify({"error": "Invalid URL format. Please enter a valid URL."}), 400
 
+    print(f'novel_url: {novel_url}\nnid: {nid}\nsite: {site}')
+    
     with lock:
         if nid in background_tasks and background_tasks[nid].is_alive():
             return jsonify({"status": "in_progress", "nid": nid})
