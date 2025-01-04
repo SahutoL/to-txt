@@ -163,7 +163,7 @@ def get_narou_chapter_text(scraper, url, headers, nid, wasuu, retry_count=3):
             sleep(get_random_delay())
     return ""
 
-def get_narou_novel_txt(novel_url: str, nid: str):
+def get_narou_novel_txt(novel_url: str, ncode: str):
     novel_url = novel_url.rstrip('/') + '/'
     headers = {
         "User-Agent": get_random_user_agent(),
@@ -179,14 +179,17 @@ def get_narou_novel_txt(novel_url: str, nid: str):
     
     try:
         sleep(get_random_delay())
+        print(f'ncode: {ncode}')
         if 'ncode' in novel_url:
-            ncode = nid
+            print(f'\"ncode\" in novel_url: {True}')
             novel_info_url = f'https://ncode.syosetu.com/novelview/infotop/ncode/{ncode}/'
             response = scraper.get(novel_info_url, headers=headers, cookies={'over18':'yes'})
         elif 'novel18' in novel_url:
-            ncode = nid
-            response = scraper.get(f'https://novel18.syosetu.com/novelview/infotop/ncode/{ncode}/', headers=headers, cookies={'over18':'yes'})
-        print(response.text[:500])
+            novel_info_url = f'https://novel18.syosetu.com/novelview/infotop/ncode/{ncode}/'
+            response = scraper.get(novel_info_url, headers=headers, cookies={'over18':'yes'})
+        else:
+            print('error at getting novel_info')
+        print(f'response.text: {response.text[:500]}')
         sleep(get_random_delay())
         response = scraper.get(novel_url, headers=headers, cookies={'over18':'yes'})
         print('Response text:', response.text[:500])
@@ -225,6 +228,8 @@ def start_scraping_task(url, nid, site):
     if site == 'syosetu_org':
         get_novel_txt(url, nid)
     elif site == 'ncode_syosetu_com':
+        print('start ncode')
+        print(f'url: {url}\nncode: {nid}')
         get_narou_novel_txt(url, nid)
     with lock:
         background_tasks.pop(nid, None)
