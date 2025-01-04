@@ -302,13 +302,11 @@ def protected():
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
 
-@app.route('/', methods=['GET', 'POST'])
-@jwt_required(optional=True)
+@app.route('/')
+@jwt_required()
 def index():
     current_user = get_jwt_identity()
-    if not current_user:
-        return redirect(url_for('login'))
-    return render_template('index.html')
+    return render_template('index.html', user=current_user)
 
 @app.route('/start-scraping', methods=['POST'])
 def start_scraping():
