@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_file, jsonify, send_from
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
+from urllib import request
 from urllib.parse import urlencode
 from bs4 import BeautifulSoup
 import concurrent.futures
@@ -183,7 +184,8 @@ def get_narou_novel_txt(novel_url: str, ncode: str):
         sleep(get_random_delay())
         if 'ncode' in novel_url:
             novel_info_url = f'https://ncode.syosetu.com/novelview/infotop/ncode/{ncode}/'
-            response = scraper.get(novel_info_url, headers=headers, cookies=cookie)
+            response = request.urlopen(novel_info_url, headers=headers, cookies=cookie)
+            #response = scraper.get(novel_info_url, headers=headers, cookies=cookie)
         elif 'novel18' in novel_url:
             novel_info_url = f'https://novel18.syosetu.com/novelview/infotop/ncode/{ncode}/'
             response = scraper.get(novel_info_url, headers=headers, cookies=cookie)
