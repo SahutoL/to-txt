@@ -165,6 +165,7 @@ def get_narou_chapter_text(scraper, url, headers, nid, wasuu, retry_count=3):
 
 def get_narou_novel_txt(novel_url: str, ncode: str):
     novel_url = novel_url.rstrip('/') + '/'
+    ks2 = ''.join(random.choices(string.ascii_lowercase + string.digits, k=12))
     headers = {
         "User-Agent": get_random_user_agent(),
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
@@ -181,7 +182,7 @@ def get_narou_novel_txt(novel_url: str, ncode: str):
         sleep(get_random_delay())
         if 'ncode' in novel_url:
             novel_info_url = f'https://ncode.syosetu.com/novelview/infotop/ncode/{ncode}/'
-            response = scraper.get(novel_info_url, headers=headers, cookies={'over18':'yes'})
+            response = scraper.get(novel_info_url, headers=headers, cookies={'over18':'yes', 'ks2':ks2})
         elif 'novel18' in novel_url:
             novel_info_url = f'https://novel18.syosetu.com/novelview/infotop/ncode/{ncode}/'
             response = scraper.get(novel_info_url, headers=headers, cookies={'over18':'yes'})
@@ -192,6 +193,7 @@ def get_narou_novel_txt(novel_url: str, ncode: str):
         print('Response text:', response.text[:500])
         soup = BeautifulSoup(response.text, "html.parser")
         print('soup: ', soup.prettify())
+        
         """
         chapter_count = len(soup.select('a[href^="./"]'))
 
