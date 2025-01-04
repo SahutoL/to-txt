@@ -1,4 +1,5 @@
 flask
+flask-jwt-extended
 requests
 beautifulsoup4
 cloudscraper
