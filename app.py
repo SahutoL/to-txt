@@ -179,16 +179,13 @@ def get_narou_novel_txt(novel_url: str, ncode: str):
     
     try:
         sleep(get_random_delay())
-        print(f'ncode: {ncode}')
         if 'ncode' in novel_url:
-            print(f'\"ncode\" in novel_url: {True}')
             novel_info_url = f'https://ncode.syosetu.com/novelview/infotop/ncode/{ncode}/'
             response = scraper.get(novel_info_url, headers=headers, cookies={'over18':'yes'})
         elif 'novel18' in novel_url:
             novel_info_url = f'https://novel18.syosetu.com/novelview/infotop/ncode/{ncode}/'
             response = scraper.get(novel_info_url, headers=headers, cookies={'over18':'yes'})
-        else:
-            print('error at getting novel_info')
+        
         print(f'response.text: {response.text[:500]}')
         sleep(get_random_delay())
         response = scraper.get(novel_url, headers=headers, cookies={'over18':'yes'})
@@ -228,8 +225,6 @@ def start_scraping_task(url, nid, site):
     if site == 'syosetu_org':
         get_novel_txt(url, nid)
     elif site == 'ncode_syosetu_com':
-        print('start ncode')
-        print(f'url: {url}\nncode: {nid}')
         get_narou_novel_txt(url, nid)
     with lock:
         background_tasks.pop(nid, None)
@@ -287,8 +282,6 @@ def start_scraping():
         site = 'ncode_syosetu_com'
     else:
         return jsonify({"error": "Invalid URL format. Please enter a valid URL."}), 400
-
-    print(f'novel_url: {novel_url}\nnid: {nid}\nsite: {site}')
     
     with lock:
         if nid in background_tasks and background_tasks[nid].is_alive():
