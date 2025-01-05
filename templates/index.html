@@ -11,25 +11,31 @@
     <link rel="stylesheet" href="/static/style.css">
     <link rel="manifest" href="/manifest.json">
     <script>
-        async function fetchProtectedResource() {
+        async finction fetchProctedResource() {
             const token = localStorage.getItem('access_token');
             if (!token) {
-                window.location.href = '/auth/login';
+                window.location.href = '/login';
                 return;
             }
-            const response = await fetch('/', {
+            const response = await fetch('/protected', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
             if (response.ok) {
-                console.log('認証成功:', await response.json());
+                const data = await response.json();
+                alert(`ようこそ、${data.logged_in_as}さん！`);
             } else {
                 console.error('認証エラー');
-                window.location.href = '/auth/login'; // トークンが無効ならログインページへ
+                window.location.href = '/login';
             }
-        }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchProtectedResource();
+        });
+
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             let novelUrl = urlParams.get('novelUrl');
