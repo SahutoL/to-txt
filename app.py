@@ -306,8 +306,6 @@ def protected():
 @jwt_required(optional=True)
 def index():
     current_user = get_jwt_identity()
-    if not current_user:
-        return redirect(url_for('login'))
     return render_template('index.html', user=current_user)
 
 @app.route('/start-scraping', methods=['POST'])
