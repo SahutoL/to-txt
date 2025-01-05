@@ -11,29 +11,28 @@
     <link rel="stylesheet" href="/static/style.css">
     <link rel="manifest" href="/manifest.json">
     <script>
-        async finction fetchProctedResource() {
+        document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('access_token');
             if (!token) {
                 window.location.href = '/login';
                 return;
             }
-            const response = await fetch('/protected', {
+            fetch('/protected', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-            });
-            if (response.ok) {
-                const data = await response.json();
-                alert(`ようこそ、${data.logged_in_as}さん！`);
-            } else {
-                console.error('認証エラー');
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('認証エラー');
+                }
+            })
+            .catch(error => {
                 window.location.href = '/login';
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchProtectedResource();
+            });
         });
 
         window.onload = function() {
