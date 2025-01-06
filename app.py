@@ -1,5 +1,6 @@
-from flask import Flask, redirect, render_template, request, send_file, jsonify, send_from_directory, url_for
+from flask import Flask, redirect, render_template, request, send_file, jsonify, send_from_directory, url_for, session
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_mail import Mail, Message
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -9,7 +10,7 @@ from bs4 import BeautifulSoup
 import concurrent.futures
 from datetime import timedelta
 from time import sleep
-import threading, io, os, re, random, logging, cloudscraper, string
+import threading, io, os, re, random, logging, cloudscraper, string, pyotp
 
 
 app = Flask(__name__)
@@ -17,12 +18,23 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=3)
+app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
+app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT'))
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS') == 'True'
+app.config['MAIL_USE_SSL'] = os.environ.get('MAIL_USE_SSL') == 'True'
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER')
+otp_secret = os.environ.get('OTP_SECRET')
 
+totp = pyotp.TOTP(otp_secret)
+mail = Mail(app)
 jwt = JWTManager(app)
 
 VALID_USERS = {
-    "admin": os.environ.get("APP_PASSWORD")
+    os.environ.get("USER_NAME"): os.environ.get("USER_PASSWORD")
 }
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -284,17 +296,29 @@ def parse_novel(novel):
         'favs': favs
     }
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
-    if request.method == 'POST':
-        data = request.json
-        username = data.get("username")
-        password = data.get("password")
-        if username in VALID_USERS and VALID_USERS[username] == password:
-            access_token = create_access_token(identity=username)
-            return jsonify(access_token=access_token), 200
-        return jsonify({"error": "認証に失敗しました"}), 401
-    return render_template('login.html')
+    data = request.json
+    username = data.get("username")
+    password = data.get("password")
+    if username in VALID_USERS and password == VALID_USERS[username]:
+        otp_code = totp.now()
+        msg = Message('Your OTP Code', recipients=[username])
+        msg.body = f'ワンタイムパスワード︰ {otp_code}'
+        mail.send(msg)
+        session['username'] = username
+        return jsonify({"message": "OTP has been sent to your email."}), 200
+    return jsonify({"error": "Authentication failed."}), 401
+
+@app.route('/verify_otp', methods=['POST'])
+def verify_otp():
+    data = request.json
+    otp_code = data.get("otp_code")
+    if 'username' in session and totp.verify(otp_code):
+        access_token = create_access_token(identity=session['username'])
+        session.pop('username', None)
+        return jsonify(access_token=access_token), 200
+    return jsonify({"error": "Invalid OTP code."}), 401
 
 @app.route('/protected', methods=['GET'])
 @jwt_required()
