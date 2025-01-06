@@ -20,8 +20,7 @@ app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=3)
 app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
 app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT'))
-mail_username = os.environ.get('MAIL_USERNAME')
-app.config['MAIL_USERNAME'] = mail_username
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS') == 'True'
 app.config['MAIL_USE_SSL'] = os.environ.get('MAIL_USE_SSL') == 'True'
@@ -305,10 +304,10 @@ def login():
         password = data.get("password")
         if username in VALID_USERS and password == VALID_USERS[username]:
             otp_code = totp.now()
-            msg = Message('Your OTP Code', recipients=[mail_username])
+            msg = Message('Your OTP Code', recipients=[username])
             msg.body = f'ワンタイムパスワード︰ {otp_code}'
             mail.send(msg)
-            session['mail_username'] = mail_username
+            session['username'] = mail_username
             return jsonify({"message": "OTP has been sent to your email."}), 200
         return jsonify({"error": "Authentication failed."}), 401
     return render_template('login.html')
@@ -318,9 +317,9 @@ def verify_otp():
     if request.method == 'POST':
         data = request.json
         otp_code = data.get("otp_code")
-        if 'mail_username' in session and totp.verify(otp_code):
-            access_token = create_access_token(identity=session['mail_username'])
-            session.pop('mail_username', None)
+        if 'username' in session and totp.verify(otp_code):
+            access_token = create_access_token(identity=session['username'])
+            session.pop('username', None)
             return jsonify(access_token=access_token), 200
         return jsonify({"error": "Invalid OTP code."}), 401
     return render_template('verify.html')
