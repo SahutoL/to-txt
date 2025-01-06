@@ -1,8 +1,10 @@
 flask
 flask-jwt-extended
+flask-mail
 requests
 beautifulsoup4
 cloudscraper
 gunicorn
 SQLAlchemy
 psycopg2-binary
+pyotp
