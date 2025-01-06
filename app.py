@@ -313,7 +313,7 @@ def login():
         return jsonify({"error": "Authentication failed."}), 401
     return render_template('login.html')
 
-@app.route('/verify_otp', methods=['GET', 'POST'])
+@app.route('/verify', methods=['GET', 'POST'])
 def verify_otp():
     if request.method == 'POST':
         data = request.json
@@ -323,7 +323,7 @@ def verify_otp():
             session.pop('mail_username', None)
             return jsonify(access_token=access_token), 200
         return jsonify({"error": "Invalid OTP code."}), 401
-    return render_template('verify_otp.html')
+    return render_template('verify.html')
 
 @app.route('/protected', methods=['GET'])
 @jwt_required()
