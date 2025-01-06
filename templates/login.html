@@ -21,7 +21,7 @@
             if (response.ok) {
                 const data = await response.json();
                 alert('ワンタイムパスワードがメールに送信されました。');
-                window.location.href = '/verify_otp';
+                window.location.href = '/verify';
             } else {
                 alert('ログイン失敗。ユーザー名またはパスワードが間違っています。');
             }
