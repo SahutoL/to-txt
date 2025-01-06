@@ -323,7 +323,7 @@ def verify_otp():
             session.pop('mail_username', None)
             return jsonify(access_token=access_token), 200
         return jsonify({"error": "Invalid OTP code."}), 401
-    return render_template('verify.html')
+    return render_template('verify_otp.html')
 
 @app.route('/protected', methods=['GET'])
 @jwt_required()
