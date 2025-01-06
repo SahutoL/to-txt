@@ -11,7 +11,7 @@
             event.preventDefault();
             const otp_code = document.getElementById('otp_code').value;
 
-            const response = await fetch('/verify_otp', {
+            const response = await fetch('/verify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ otp_code })
