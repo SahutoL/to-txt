@@ -310,6 +310,7 @@ def login():
             session['username'] = username
             return jsonify({"message": "OTP has been sent to your email."}), 200
         return jsonify({"error": "Authentication failed."}), 401
+    return render_template('login.html')
 
 @app.route('/verify_otp', methods=['POST'])
 def verify_otp():
