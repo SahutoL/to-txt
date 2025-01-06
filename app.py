@@ -296,7 +296,7 @@ def parse_novel(novel):
         'favs': favs
     }
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         data = request.json
