@@ -14,7 +14,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('access_token');
             if (!token) {
-                window.location.href = '/verify';
+                window.location.href = '/login';
                 return;
             }
             fetch('/protected', {
