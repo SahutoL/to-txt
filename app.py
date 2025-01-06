@@ -296,19 +296,20 @@ def parse_novel(novel):
         'favs': favs
     }
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
-    data = request.json
-    username = data.get("username")
-    password = data.get("password")
-    if username in VALID_USERS and password == VALID_USERS[username]:
-        otp_code = totp.now()
-        msg = Message('Your OTP Code', recipients=[username])
-        msg.body = f'ワンタイムパスワード︰ {otp_code}'
-        mail.send(msg)
-        session['username'] = username
-        return jsonify({"message": "OTP has been sent to your email."}), 200
-    return jsonify({"error": "Authentication failed."}), 401
+    if request.method == 'POST':
+        data = request.json
+        username = data.get("username")
+        password = data.get("password")
+        if username in VALID_USERS and password == VALID_USERS[username]:
+            otp_code = totp.now()
+            msg = Message('Your OTP Code', recipients=[username])
+            msg.body = f'ワンタイムパスワード︰ {otp_code}'
+            mail.send(msg)
+            session['username'] = username
+            return jsonify({"message": "OTP has been sent to your email."}), 200
+        return jsonify({"error": "Authentication failed."}), 401
 
 @app.route('/verify_otp', methods=['POST'])
 def verify_otp():
