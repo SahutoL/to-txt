@@ -307,7 +307,7 @@ def login():
             msg = Message('Your OTP Code', recipients=[username])
             msg.body = f'ワンタイムパスワード︰ {otp_code}'
             mail.send(msg)
-            session['username'] = mail_username
+            session['username'] = username
             return jsonify({"message": "OTP has been sent to your email."}), 200
         return jsonify({"error": "Authentication failed."}), 401
     return render_template('login.html')
