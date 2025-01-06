@@ -304,9 +304,11 @@ def login():
         password = data.get("password")
         if username in VALID_USERS and password == VALID_USERS[username]:
             otp_code = totp.now()
+            """sending otp mail
             msg = Message('Your OTP Code', recipients=[username])
             msg.body = f'ワンタイムパスワード︰ {otp_code}'
             mail.send(msg)
+            """
             session['username'] = username
             return jsonify({"message": "OTP has been sent to your email."}), 200
         return jsonify({"error": "Authentication failed."}), 401
