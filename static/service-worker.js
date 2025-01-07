@@ -1,4 +1,4 @@
-const CACHE_NAME = 'to-txt-cache-v2.1.0';
+const CACHE_NAME = 'to-txt-cache-v2.1.1';
 const urlsToCache = [
   '/',
   '/login',
