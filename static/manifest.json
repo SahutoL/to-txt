@@ -1,7 +1,7 @@
 {
   "name": "to .txt",
   "short_name": "toTxt",
-  "start_url": "/",
+  "start_url": "/login",
   "display": "standalone",
   "background_color": "#f8f9fa",
   "theme_color": "#007bff",
