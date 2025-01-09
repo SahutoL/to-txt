@@ -268,7 +268,11 @@ def parse_novel(novel):
     link = novel.find('a').get('href')
     author_info = novel.find_all('div', class_='blo_title_sak')[-1].text.split('\n')
     author = author_info[2][2:]
-    parody = author_info[1].replace('原作：','').replace('オリジナル：','')
+    parody = author_info[1].replace('原作：','')
+    if 'オリジナル：' in parody:
+        parody = ['オリジナル', parody.replace('オリジナル：','')]
+    else:
+        parody = ['原作', parody]
     description = novel.find('div', class_='blo_inword').text
     status = novel.find('div', class_='blo_wasuu_base').find('span').text
     latest = novel.find('a', attrs={'title':'最新話へのリンク'}).text
