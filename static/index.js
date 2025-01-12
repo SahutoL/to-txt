@@ -1,6 +1,6 @@
 
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
+    navigator.serviceWorker.register('./service-worker.js')
     .then(function(registration) {
         console.log('Service Worker registered with scope:', registration.scope);
         registration.onupdatefound = function() {
@@ -28,7 +28,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-fetch('/static/categories.json')
+fetch('./categories.json')
 .then(response => response.json())
 .then(categories => {
     const selectElement = document.getElementById('parody');
